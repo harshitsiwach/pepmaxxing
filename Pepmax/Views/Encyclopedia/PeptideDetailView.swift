@@ -17,6 +17,11 @@ struct PeptideDetailView: View {
                 // Quick info row
                 quickInfoRow
                 
+                // Smart Insights
+                if hasSmartInsights {
+                    smartInsightsSection
+                }
+                
                 // Mechanism / Effects
                 mechanismSection
                 
@@ -150,6 +155,64 @@ struct PeptideDetailView: View {
                     .lineLimit(2)
             }
             .frame(maxWidth: .infinity)
+        }
+    }
+    
+    // MARK: - Smart Insights
+    
+    private var hasSmartInsights: Bool {
+        return !smartInsights.isEmpty
+    }
+    
+    private var smartInsights: [(icon: String, title: String, message: String, color: Color)] {
+        var insights: [(String, String, String, Color)] = []
+        
+        // Investigational Warning
+        if peptide.isInvestigational {
+            insights.append(("flask.fill", "Investigational Use", "This peptide is largely investigational and lacks long-term human safety data.", theme.warning))
+        }
+        
+        // Gender specific
+        if store.profile.gender == .female && peptide.genderNotes.lowercased().contains("women") {
+            insights.append(("person.2.fill", "Gender Note", "Contains specific contraindications or dosing adjustments for females.", Color(hex: "E056A0")))
+        }
+        
+        // BMI warning
+        if store.profile.bmi < 18.5 && peptide.category.lowercased().contains("weight loss") {
+            insights.append(("exclamationmark.triangle.fill", "Low BMI Alert", "Your BMI is underweight. Use of weight loss peptides is strongly discouraged.", theme.error))
+        }
+        
+        return insights
+    }
+    
+    private var smartInsightsSection: some View {
+        VStack(spacing: 12) {
+            ForEach(smartInsights.indices, id: \.self) { index in
+                let insight = smartInsights[index]
+                GlassCard {
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(systemName: insight.icon)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundStyle(insight.color)
+                            .padding(.top, 2)
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(insight.title)
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundStyle(insight.color)
+                            Text(insight.message)
+                                .font(.system(size: 13, weight: .regular))
+                                .foregroundStyle(theme.textMuted)
+                                .lineSpacing(2)
+                        }
+                        Spacer()
+                    }
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .stroke(insight.color.opacity(0.3), lineWidth: 1)
+                }
+            }
         }
     }
     
