@@ -1,0 +1,133 @@
+# Build Pepmax App in Xcode - Liquid Glass Theme Prompt
+
+## Project Overview
+
+- **App Name:** Pepmax
+- **Bundle Identifier:** (set in Xcode)
+- **Platform:** iOS (primary), Android (secondary)
+- **Deployment Target:** iOS 15.1+
+
+## Tech Stack
+
+- **Framework:** Expo SDK 54 + React Native 0.81.5
+- **Language:** TypeScript (strict mode)
+- **Styling:** NativeWind (Tailwind for RN) - current code uses inline styles with theme utilities
+- **State Management:** Zustand v5
+- **Navigation:** React Navigation 7 (Bottom Tabs + Native Stack)
+- **Data Storage:** AsyncStorage + local JSON database
+- **Fonts:** System default (monospace for numeric displays)
+
+## Liquid Glass Theme Specification
+
+### Dark Mode (Primary)
+| Element | Value |
+|---------|-------|
+| Background | `#0A0A0F` (near black) |
+| Surface/Cards | `rgba(30, 30, 40, 0.6)` |
+| Surface Elevated | `rgba(40, 40, 55, 0.7)` |
+| Glass Layer | `rgba(255, 255, 255, 0.08)` |
+| Glass Border | `rgba(255, 255, 255, 0.15)` |
+| Primary Accent | `#FF2D55` (hot pink) |
+| Primary Soft | `#FF6B82` |
+| Primary Glow | `rgba(255, 45, 85, 0.3)` |
+| Text | `#FFFFFF` |
+| Text Muted | `rgba(255, 255, 255, 0.5)` |
+| Border | `rgba(255, 255, 255, 0.12)` |
+| Success | `#00FF87` |
+| Warning | `#FFB800` |
+| Error | `#FF2D55` |
+
+### Light Mode
+| Element | Value |
+|---------|-------|
+| Background | `#F5F5F7` |
+| Surface/Cards | `rgba(255, 255, 255, 0.7)` |
+| Glass Layer | `rgba(255, 255, 255, 0.25)` |
+| Glass Border | `rgba(0, 0, 0, 0.1)` |
+| Primary | `#FF2D55` |
+| Text | `#1A1A1F` |
+| Success | `#00C853` |
+| Warning | `#FF9500` |
+
+### Glass Card Style (both modes)
+- Border radius: 16px
+- Border: 1px with opacity
+- Shadow: offset {0, 8}, opacity 0.3, radius 16
+- Elevation: 8
+
+## Typography System
+
+| Style | Size | Weight | Letter Spacing |
+|-------|------|--------|-----------------|
+| h1 | 32px | 700 | -1 |
+| h2 | 24px | 700 | -0.5 |
+| h3 | 20px | 600 | default |
+| body | 16px | 400 | default |
+| bodySmall | 14px | 400 | default |
+| caption | 12px | 400 | default |
+| mono (doses) | 14px | monospace | default |
+
+## Screen Architecture
+
+1. **Home Screen** - Profile (gender toggle), active cycle timeline, goal cards, MVP peptides
+2. **Encyclopedia Screen** - All 119 peptides, categorized, searchable, filterable
+3. **Peptide Detail Screen** - Full peptide info (doses, benefits, stacks, legal status)
+4. **Tracker Screen** - Logging injections, cycle management
+5. **Calculator Screen** - Dosage calculator
+6. **Settings Screen** - User preferences (country, gender, dark mode toggle)
+
+## All 119 Peptides (8 Main Categories)
+
+1. **Healing & Regenerative:** BPC-157, TB-500, GHK-Cu, Palifermin
+2. **Growth Hormone Secretagogues:** Ipamorelin, Sermorelin, CJC-1295, Tesamorelin, IGF-1
+3. **Fat Loss & Metabolism:** AOD-9604, HGH Fragment 176-191
+4. **Cognitive & Nootropic:** Cerebrolysin, P21, Semax, Selank
+5. **Anti-Aging & Rejuvenation:** Epithalon, Thymosin Alpha-1, Thymosin Beta-4, Epitalon
+6. **Sexual Health & Libido:** PT-141, Melanotan II, Bremelanotide
+7. **Muscle Growth & Performance:** GHRP-2, GHRP-6, Hexarelin, Follistatin
+8. **Hair Growth:** GHK-Cu
+9. **Weight Loss Meds (FDA):** Semaglutide, Tirzepatide, Liraglutide, Dulaglutide, Exenatide, Albiglutide, Lixisenatide
+10. **Experimental:** 60+ research compounds
+
+## Build Steps for Xcode
+
+### Step 1: Generate iOS Native Project
+```bash
+cd /Users/0xugly/Desktop/pepmax/pepmax
+npx expo prebuild --platform ios
+```
+
+### Step 2: Open in Xcode
+```bash
+open ios/Pepmax.xcworkspace
+```
+
+### Step 3: Build & Run
+In Xcode:
+- Select target device/simulator
+- Press Cmd+R to build and run
+
+**OR from command line:**
+```bash
+xcodebuild -workspace ios/Pepmax.xcworkspace -scheme Pepmax -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 16' build
+```
+
+## Key Files
+
+- `App.tsx` - Entry point
+- `src/utils/theme.ts` - Glass theme definitions (modify here for theming)
+- `src/utils/db.ts` - Database utilities
+- `src/assets/data/peptide_database.json` - All 119 peptides
+- `src/components/GlassCard.tsx` - Reusable glass card component
+- `src/screens/*.tsx` - All screens
+- `src/store/*.ts` - Zustand stores
+- `app.json` - Expo configuration
+
+## Customization Points (Enhance Liquid Glass)
+
+To enhance the glass effect in `src/utils/theme.ts`:
+
+1. Adjust `glassStyle.dark.backgroundColor` - add more transparency
+2. Add blur effects using expo-blur
+3. Add subtle gradient overlays on cards
+4. Add glow effects behind cards using primary color (`#FF2D55`)
