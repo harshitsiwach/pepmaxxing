@@ -22,23 +22,29 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
+            CompareView()
+                .tabItem {
+                    Label("Compare", systemImage: "square.stack.3d.up")
+                }
+                .tag(2)
+            
             TrackerView()
                 .tabItem {
                     Label("Tracker", systemImage: "syringe.fill")
                 }
-                .tag(2)
+                .tag(3)
             
             CalculatorView()
                 .tabItem {
                     Label("Calculator", systemImage: "function")
                 }
-                .tag(3)
+                .tag(4)
             
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
-                .tag(4)
+                .tag(5)
         }
         .tint(theme.primary)
     }

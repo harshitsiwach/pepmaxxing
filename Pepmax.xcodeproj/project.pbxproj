@@ -24,6 +24,7 @@
 		E6E870581ED175160AECE104 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915F5BB95526A0354F33E8E2 /* OnboardingView.swift */; };
 		EAEBE0958A47790AC6CBAC22 /* PeptideDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A905A21DE4EBD2D5AE2F7276 /* PeptideDatabase.swift */; };
 		EC834DB147FF971AB7A8A964 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BB87C1FA1E5BF9B35B3811 /* AppStore.swift */; };
+		ED2DF7CCBAC6BB3DB2A88205 /* CompareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EEE5B28BCA704CE8DC6BA /* CompareView.swift */; };
 		EDA4AB1BCCB3F1357B16EECB /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB98418A1CC329AB7B74DE1 /* RemindersView.swift */; };
 		FBD95E11933822B1C8091BB0 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E5CEA9B44FF7A15B276AB /* NotificationManager.swift */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 		AFDF0E22C625FCD9F359C1C5 /* TrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerView.swift; sourceTree = "<group>"; };
 		B251DA20045A229349CB01E5 /* PepmaxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PepmaxApp.swift; sourceTree = "<group>"; };
 		C18EF259A8D82A7F17B053C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CD3EEE5B28BCA704CE8DC6BA /* CompareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareView.swift; sourceTree = "<group>"; };
 		DB305BD36B0966F647386DC6 /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCard.swift; sourceTree = "<group>"; };
 		DEB98418A1CC329AB7B74DE1 /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersView.swift; sourceTree = "<group>"; };
 		F7F9E8A66AEF4ABA181E4BD7 /* InjectionLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionLog.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		3EE736385A79832D1D970B8A /* Encyclopedia */ = {
 			isa = PBXGroup;
 			children = (
+				CD3EEE5B28BCA704CE8DC6BA /* CompareView.swift */,
 				19CC4F04C86CBFBD22F256B7 /* EncyclopediaView.swift */,
 				41B78FA435539C0B18E0B564 /* PeptideDetailView.swift */,
 			);
@@ -256,6 +259,7 @@
 			files = (
 				EC834DB147FF971AB7A8A964 /* AppStore.swift in Sources */,
 				0E7B7923038A195A932F126A /* CalculatorView.swift in Sources */,
+				ED2DF7CCBAC6BB3DB2A88205 /* CompareView.swift in Sources */,
 				1097B2779E7669C07B591FA8 /* EncyclopediaView.swift in Sources */,
 				542461D01C29D8EE2ED4D684 /* GlassCard.swift in Sources */,
 				28112F5EA20A9D9EB6B77E3F /* HomeView.swift in Sources */,
