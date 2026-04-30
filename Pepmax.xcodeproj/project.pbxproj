@@ -18,6 +18,7 @@
 		6FE89B0DBD76043F4FB4286B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C18EF259A8D82A7F17B053C3 /* Assets.xcassets */; };
 		75970A762FDAC0B415FB5530 /* TrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF0E22C625FCD9F359C1C5 /* TrackerView.swift */; };
 		7B737B5984E3EB3FA7C71228 /* PepmaxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B251DA20045A229349CB01E5 /* PepmaxApp.swift */; };
+		95F049E1BEDC9001DB71E363 /* DataExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A10FC4C1C286697809EE7A /* DataExporter.swift */; };
 		B284E269B9D9915CFF0C5BB4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41912C7A265173DDF0302DC2 /* Theme.swift */; };
 		C2C96BC0FFB690AC581DFB7F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA9C85C489CBFA2BA235AFD /* SettingsView.swift */; };
 		D1625E200446534EEF4DD4A8 /* DailyTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B6841000571E9BC500456 /* DailyTips.swift */; };
@@ -39,6 +40,7 @@
 		41912C7A265173DDF0302DC2 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		41B78FA435539C0B18E0B564 /* PeptideDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideDetailView.swift; sourceTree = "<group>"; };
 		429FC9522D228AB6CF3386BC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		46A10FC4C1C286697809EE7A /* DataExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExporter.swift; sourceTree = "<group>"; };
 		4ADA945858E2E11852D9EF81 /* peptides.csv */ = {isa = PBXFileReference; path = peptides.csv; sourceTree = "<group>"; };
 		66BB87C1FA1E5BF9B35B3811 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		73C1794D3D0FEDF919788632 /* CalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorView.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 			children = (
 				66BB87C1FA1E5BF9B35B3811 /* AppStore.swift */,
 				DA7B6841000571E9BC500456 /* DailyTips.swift */,
+				46A10FC4C1C286697809EE7A /* DataExporter.swift */,
 				AE4E5CEA9B44FF7A15B276AB /* NotificationManager.swift */,
 				A905A21DE4EBD2D5AE2F7276 /* PeptideDatabase.swift */,
 				4ADA945858E2E11852D9EF81 /* peptides.csv */,
@@ -268,6 +271,7 @@
 				ED2DF7CCBAC6BB3DB2A88205 /* CompareView.swift in Sources */,
 				DBFFEEEC11202A2913FFF06C /* CycleAnalyticsView.swift in Sources */,
 				D1625E200446534EEF4DD4A8 /* DailyTips.swift in Sources */,
+				95F049E1BEDC9001DB71E363 /* DataExporter.swift in Sources */,
 				1097B2779E7669C07B591FA8 /* EncyclopediaView.swift in Sources */,
 				542461D01C29D8EE2ED4D684 /* GlassCard.swift in Sources */,
 				28112F5EA20A9D9EB6B77E3F /* HomeView.swift in Sources */,

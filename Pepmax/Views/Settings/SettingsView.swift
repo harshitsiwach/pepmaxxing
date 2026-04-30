@@ -8,9 +8,13 @@ struct SettingsView: View {
     
     let countries = ["United States", "United Kingdom", "Canada", "Australia", "Germany", "India", "Japan", "Brazil", "Other"]
     
+    @State private var showShareSheet = false
+    @State private var exportURL: URL?
+    
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
+
                 VStack(spacing: 20) {
                     // Header
                     HStack {
@@ -236,6 +240,33 @@ struct SettingsView: View {
                         }
                     }
                     
+                    // Data & Backup
+                    GlassCard {
+                        VStack(alignment: .leading, spacing: 16) {
+                            sectionHeader(title: "Data & Backup", icon: "externaldrive.fill")
+                            
+                            Button {
+                                exportData()
+                            } label: {
+                                HStack {
+                                    Text("Export Injection Logs")
+                                        .font(.system(size: 15, weight: .medium))
+                                        .foregroundStyle(theme.text)
+                                    Spacer()
+                                    HStack(spacing: 6) {
+                                        Text("CSV")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundStyle(theme.textMuted)
+                                        Image(systemName: "square.and.arrow.up")
+                                            .font(.system(size: 14))
+                                            .foregroundStyle(theme.primary)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    
                     // About
                     GlassCard {
                         VStack(alignment: .leading, spacing: 16) {
@@ -270,6 +301,11 @@ struct SettingsView: View {
                 .padding(.bottom, 100)
             }
             .background(theme.background.ignoresSafeArea())
+            .sheet(isPresented: $showShareSheet) {
+                if let url = exportURL {
+                    ShareSheet(items: [url])
+                }
+            }
         }
     }
     
@@ -295,4 +331,26 @@ struct SettingsView: View {
                 .foregroundStyle(theme.textMuted)
         }
     }
+    
+    private func exportData() {
+        if let url = DataExporter.shared.exportLogsToCSV(cycles: store.cycles) {
+            exportURL = url
+            showShareSheet = true
+            Haptics.notification(.success)
+        } else {
+            Haptics.notification(.error)
+        }
+    }
+}
+
+// MARK: - Share Sheet Wrapper
+
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
