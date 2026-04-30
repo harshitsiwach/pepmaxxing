@@ -36,6 +36,9 @@ struct TrackerView: View {
                     // Recent logs
                     recentLogsSection
                     
+                    // Reminders
+                    RemindersView()
+                    
                     // Past cycles
                     pastCyclesSection
                 }
