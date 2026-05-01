@@ -12,6 +12,8 @@ class AppStore: ObservableObject {
     @Published var favoriteSteroidNames: Set<String> { didSet { saveFavoriteSteroids() } }
     @Published var recentlyViewedSteroidNames: [String] { didSet { saveRecentSteroids() } }
     
+    @Published var bloodworkLogs: [BloodworkLog] { didSet { saveBloodworkLogs() } }
+    
     init() {
         self.profile = Self.loadProfile()
         self.cycles = Self.loadCycles()
@@ -22,6 +24,8 @@ class AppStore: ObservableObject {
         self.favoriteSteroidNames = Self.loadFavoriteSteroids()
         self.recentlyViewedSteroidNames = Self.loadRecentSteroids()
         self.steroids = SteroidDatabase.shared.steroids
+        
+        self.bloodworkLogs = Self.loadBloodworkLogs()
     }
     
     // MARK: - Favorites
@@ -198,6 +202,18 @@ class AppStore: ObservableObject {
     
     private func saveRecentSteroids() {
         UserDefaults.standard.set(recentlyViewedSteroidNames, forKey: "recent_steroids")
+    }
+    
+    private static func loadBloodworkLogs() -> [BloodworkLog] {
+        guard let data = UserDefaults.standard.data(forKey: "bloodwork_logs"),
+              let b = try? JSONDecoder().decode([BloodworkLog].self, from: data) else { return [] }
+        return b
+    }
+    
+    private func saveBloodworkLogs() {
+        if let data = try? JSONEncoder().encode(bloodworkLogs) {
+            UserDefaults.standard.set(data, forKey: "bloodwork_logs")
+        }
     }
 }
 

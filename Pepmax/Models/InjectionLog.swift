@@ -1,5 +1,35 @@
 import Foundation
 
+// MARK: - Bloodwork Log Model
+
+struct BloodworkLog: Identifiable, Codable {
+    let id: UUID
+    let date: Date
+    var testosterone: Double?
+    var freeTestosterone: Double?
+    var estradiol: Double?
+    var ast: Double?
+    var alt: Double?
+    var hdl: Double?
+    var ldl: Double?
+    var igf1: Double?
+    var notes: String
+    
+    init(id: UUID = UUID(), date: Date = Date(), testosterone: Double? = nil, freeTestosterone: Double? = nil, estradiol: Double? = nil, ast: Double? = nil, alt: Double? = nil, hdl: Double? = nil, ldl: Double? = nil, igf1: Double? = nil, notes: String = "") {
+        self.id = id
+        self.date = date
+        self.testosterone = testosterone
+        self.freeTestosterone = freeTestosterone
+        self.estradiol = estradiol
+        self.ast = ast
+        self.alt = alt
+        self.hdl = hdl
+        self.ldl = ldl
+        self.igf1 = igf1
+        self.notes = notes
+    }
+}
+
 // MARK: - Injection Log Model
 
 struct InjectionLog: Identifiable, Codable {
