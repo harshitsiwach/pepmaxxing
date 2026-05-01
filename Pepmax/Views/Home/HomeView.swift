@@ -359,17 +359,18 @@ struct HomeView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    goalCard(title: "Fat Loss", icon: "flame.fill", color: Color(hex: "FF6B6B"), peptideCount: 8)
-                    goalCard(title: "Muscle Growth", icon: "figure.strengthtraining.traditional", color: Color(hex: "6C5CE7"), peptideCount: 5)
-                    goalCard(title: "Healing", icon: "bandage.fill", color: Color(hex: "0984E3"), peptideCount: 6)
-                    goalCard(title: "Cognitive", icon: "brain.head.profile", color: Color(hex: "FDCB6E"), peptideCount: 4)
-                    goalCard(title: "Anti-Aging", icon: "sparkles", color: Color(hex: "F8A5C2"), peptideCount: 3)
+                    goalCard(title: "Fat Loss", icon: "flame.fill", color: Color(hex: "FF6B6B"), compoundCount: 15)
+                    goalCard(title: "Muscle Growth", icon: "figure.strengthtraining.traditional", color: Color(hex: "6C5CE7"), compoundCount: 52)
+                    goalCard(title: "TRT / HRT", icon: "arrow.triangle.2.circlepath", color: Color(hex: "00B894"), compoundCount: 18)
+                    goalCard(title: "Healing", icon: "bandage.fill", color: Color(hex: "0984E3"), compoundCount: 12)
+                    goalCard(title: "Cognitive", icon: "brain.head.profile", color: Color(hex: "FDCB6E"), compoundCount: 4)
+                    goalCard(title: "Anti-Aging", icon: "sparkles", color: Color(hex: "F8A5C2"), compoundCount: 6)
                 }
             }
         }
     }
     
-    private func goalCard(title: String, icon: String, color: Color, peptideCount: Int) -> some View {
+    private func goalCard(title: String, icon: String, color: Color, compoundCount: Int) -> some View {
         Button {
             selectedTab = 3
         } label: {
@@ -386,7 +387,7 @@ struct HomeView: View {
                     Text(title)
                         .font(.system(size: 15, weight: .bold, design: .rounded))
                         .foregroundStyle(theme.text)
-                    Text("\(peptideCount) peptides")
+                    Text("\(compoundCount) compounds")
                         .font(.system(size: 12, weight: .medium, design: .rounded))
                         .foregroundStyle(theme.textMuted)
                 }
