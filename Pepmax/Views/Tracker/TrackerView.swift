@@ -20,74 +20,47 @@ struct TrackerView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     // Header
-                    HStack {
-                        Text("Tracker")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundStyle(theme.text)
-                        Spacer()
-                        
-                        Button {
-                            showBloodworkSheet = true
-                        } label: {
-                            Image(systemName: "drop.fill")
-                                .font(.system(size: 20))
-                                .foregroundStyle(Color(hex: "FF2D55"))
-                                .frame(width: 44, height: 44)
-                                .background { Circle().fill(Color(hex: "FF2D55").opacity(0.12)) }
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Button {
-                            showPCTWizard = true
-                        } label: {
-                            Image(systemName: "shield.fill")
-                                .font(.system(size: 20))
-                                .foregroundStyle(Color(hex: "0984E3"))
-                                .frame(width: 44, height: 44)
-                                .background { Circle().fill(Color(hex: "0984E3").opacity(0.12)) }
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Button {
-                            showPhotoVault = true
-                        } label: {
-                            Image(systemName: "camera.fill")
-                                .font(.system(size: 20))
-                                .foregroundStyle(Color(hex: "6C5CE7"))
-                                .frame(width: 44, height: 44)
-                                .background { Circle().fill(Color(hex: "6C5CE7").opacity(0.12)) }
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Button {
-                            showRotationMap = true
-                        } label: {
-                            Image(systemName: "figure.arms.open")
-                                .font(.system(size: 20))
-                                .foregroundStyle(theme.primary)
-                                .frame(width: 44, height: 44)
-                                .background { Circle().fill(theme.primary.opacity(0.12)) }
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Button {
-                            showAnalyticsSheet = true
-                        } label: {
-                            Image(systemName: "chart.bar.fill")
-                                .font(.system(size: 20))
-                                .foregroundStyle(theme.primary)
-                                .frame(width: 44, height: 44)
-                                .background {
-                                    Circle().fill(theme.primary.opacity(0.12))
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Text("Tracker")
+                                .font(.system(size: 32, weight: .bold))
+                                .foregroundStyle(theme.text)
+                            Spacer()
+                            
+                            GlowButton(title: store.activeCycle == nil ? "New Cycle" : "Log Injection", icon: "plus", isSmall: true) {
+                                if store.activeCycle != nil {
+                                    showLogSheet = true
+                                } else {
+                                    showNewCycleSheet = true
                                 }
+                            }
                         }
-                        .buttonStyle(.plain)
                         
-                        GlowButton(title: "New Cycle", icon: "plus", isSmall: true) {
-                            showNewCycleSheet = true
+                        // Tools Row
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                toolButton(icon: "drop.fill", color: Color(hex: "FF2D55"), text: "Bloodwork") {
+                                    showBloodworkSheet = true
+                                }
+                                
+                                toolButton(icon: "shield.fill", color: Color(hex: "0984E3"), text: "PCT") {
+                                    showPCTWizard = true
+                                }
+                                
+                                toolButton(icon: "camera.fill", color: Color(hex: "6C5CE7"), text: "Photos") {
+                                    showPhotoVault = true
+                                }
+                                
+                                toolButton(icon: "figure.arms.open", color: theme.primary, text: "Map") {
+                                    showRotationMap = true
+                                }
+                                
+                                toolButton(icon: "chart.bar.fill", color: theme.primary, text: "Stats") {
+                                    showAnalyticsSheet = true
+                                }
+                            }
                         }
                     }
-                    
                     // Active cycle card
                     activeCycleSection
                     
@@ -142,6 +115,30 @@ struct TrackerView: View {
                     .environmentObject(store)
             }
         }
+    }
+    
+    private func toolButton(icon: String, color: Color, text: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(color)
+                Text(text)
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(theme.text)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(
+                Capsule()
+                    .fill(Color.white.opacity(isDarkMode ? 0.05 : 0.4))
+            )
+            .overlay(
+                Capsule()
+                    .stroke(color.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
     
     private var activeCycleSection: some View {
