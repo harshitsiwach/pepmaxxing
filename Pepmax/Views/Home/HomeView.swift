@@ -28,6 +28,11 @@ struct HomeView: View {
                     // Active Cycle
                     activeCycleCard
                     
+                    // Daily Support Meds
+                    if !store.supportMeds.isEmpty {
+                        supportMedsSection
+                    }
+                    
                     // My Favorites
                     if !store.favoritePeptides.isEmpty || !store.favoriteSteroids.isEmpty {
                         favoritesSection
@@ -287,6 +292,74 @@ struct HomeView: View {
             }
         }
         .buttonStyle(.plain)
+    }
+    
+    // MARK: - Support Meds
+    private var supportMedsSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("Daily Support Checklist")
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundStyle(theme.text)
+                Spacer()
+                Text("\(store.todaySupportLog().completedMedIds.count)/\(store.supportMeds.count)")
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(theme.textMuted)
+            }
+            
+            VStack(spacing: 10) {
+                ForEach(store.supportMeds) { med in
+                    let isCompleted = store.todaySupportLog().completedMedIds.contains(med.id)
+                    Button {
+                        withAnimation(.spring(response: 0.3)) {
+                            store.toggleSupportMed(id: med.id)
+                            Haptics.impact(.light)
+                        }
+                    } label: {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(isCompleted ? Color(hex: "00B894") : Color.clear)
+                                    .frame(width: 24, height: 24)
+                                    .overlay(
+                                        Circle().stroke(isCompleted ? Color(hex: "00B894") : theme.border, lineWidth: 2)
+                                    )
+                                
+                                if isCompleted {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 12, weight: .bold))
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(med.name)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(isCompleted ? theme.textMuted : theme.text)
+                                    .strikethrough(isCompleted)
+                                
+                                Text("\(med.dosage) • \(med.frequency)")
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(theme.textMuted)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 14)
+                        .background {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.white.opacity(isDarkMode ? 0.05 : 0.4))
+                        }
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isCompleted ? Color(hex: "00B894").opacity(0.3) : theme.border, lineWidth: 1)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
     }
     
     // MARK: - Active Cycle

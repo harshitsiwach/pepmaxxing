@@ -252,7 +252,32 @@ struct SettingsView: View {
                     // Data & Backup
                     GlassCard {
                         VStack(alignment: .leading, spacing: 16) {
-                            sectionHeader(title: "Data & Backup", icon: "externaldrive.fill")
+                            sectionHeader(title: "Data & Sync", icon: "arrow.triangle.2.circlepath")
+                            
+                            HStack {
+                                HStack(spacing: 10) {
+                                    Image(systemName: "heart.fill")
+                                        .font(.system(size: 18))
+                                        .foregroundStyle(Color(hex: "FF2D55"))
+                                    Text("Apple Health Sync")
+                                        .font(.system(size: 15, weight: .medium))
+                                        .foregroundStyle(theme.text)
+                                }
+                                Spacer()
+                                Button {
+                                    syncWithAppleHealth()
+                                } label: {
+                                    Text("Sync")
+                                        .font(.system(size: 13, weight: .bold))
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 16)
+                                        .padding(.vertical, 8)
+                                        .background(Capsule().fill(theme.primary))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            
+                            Divider().foregroundStyle(theme.border)
                             
                             Button {
                                 exportData()
@@ -348,6 +373,21 @@ struct SettingsView: View {
             Haptics.notification(.success)
         } else {
             Haptics.notification(.error)
+        }
+    }
+    
+    private func syncWithAppleHealth() {
+        HealthManager.shared.requestAuthorization { success in
+            if success {
+                HealthManager.shared.fetchLatestWeight { weight in
+                    if let w = weight {
+                        store.profile.weight = w
+                        Haptics.notification(.success)
+                    }
+                }
+            } else {
+                Haptics.notification(.error)
+            }
         }
     }
 }

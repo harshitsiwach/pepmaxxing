@@ -257,3 +257,33 @@ struct PhotoLog: Identifiable, Codable {
         self.notes = notes
     }
 }
+
+// MARK: - Support Meds & Oral Tracker Models
+
+struct SupportMed: Identifiable, Codable, Equatable {
+    let id: UUID
+    var name: String
+    var dosage: String
+    var frequency: String // e.g., "Daily", "Weekly", "As Needed"
+    var notes: String
+    
+    init(id: UUID = UUID(), name: String, dosage: String, frequency: String = "Daily", notes: String = "") {
+        self.id = id
+        self.name = name
+        self.dosage = dosage
+        self.frequency = frequency
+        self.notes = notes
+    }
+}
+
+struct DailySupportLog: Identifiable, Codable {
+    let id: UUID
+    let date: Date
+    var completedMedIds: Set<UUID>
+    
+    init(id: UUID = UUID(), date: Date = Date(), completedMedIds: Set<UUID> = []) {
+        self.id = id
+        self.date = Calendar.current.startOfDay(for: date)
+        self.completedMedIds = completedMedIds
+    }
+}

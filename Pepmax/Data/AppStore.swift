@@ -15,6 +15,8 @@ class AppStore: ObservableObject {
     @Published var bloodworkLogs: [BloodworkLog] { didSet { saveBloodworkLogs() } }
     @Published var pctProtocols: [PCTProtocol] { didSet { savePCTProtocols() } }
     @Published var photoLogs: [PhotoLog] { didSet { savePhotoLogs() } }
+    @Published var supportMeds: [SupportMed] { didSet { saveSupportMeds() } }
+    @Published var dailySupportLogs: [DailySupportLog] { didSet { saveDailySupportLogs() } }
     
     init() {
         self.profile = Self.loadProfile()
@@ -30,6 +32,8 @@ class AppStore: ObservableObject {
         self.bloodworkLogs = Self.loadBloodworkLogs()
         self.pctProtocols = Self.loadPCTProtocols()
         self.photoLogs = Self.loadPhotoLogs()
+        self.supportMeds = Self.loadSupportMeds()
+        self.dailySupportLogs = Self.loadDailySupportLogs()
     }
     
     // MARK: - Favorites
@@ -262,6 +266,62 @@ class AppStore: ObservableObject {
     private func savePhotoLogs() {
         if let data = try? JSONEncoder().encode(photoLogs) {
             UserDefaults.standard.set(data, forKey: "photo_logs")
+        }
+    }
+    
+    private static func loadSupportMeds() -> [SupportMed] {
+        guard let data = UserDefaults.standard.data(forKey: "support_meds"),
+              let decoded = try? JSONDecoder().decode([SupportMed].self, from: data) else {
+            // Default support meds
+            return [
+                SupportMed(name: "Fish Oil", dosage: "2000mg", frequency: "Daily", notes: "Heart & joint health"),
+                SupportMed(name: "NAC", dosage: "1200mg", frequency: "Daily", notes: "Liver support"),
+                SupportMed(name: "Multivitamin", dosage: "1 tablet", frequency: "Daily")
+            ]
+        }
+        return decoded
+    }
+    
+    private func saveSupportMeds() {
+        if let data = try? JSONEncoder().encode(supportMeds) {
+            UserDefaults.standard.set(data, forKey: "support_meds")
+        }
+    }
+    
+    private static func loadDailySupportLogs() -> [DailySupportLog] {
+        guard let data = UserDefaults.standard.data(forKey: "daily_support_logs"),
+              let decoded = try? JSONDecoder().decode([DailySupportLog].self, from: data) else { return [] }
+        return decoded
+    }
+    
+    private func saveDailySupportLogs() {
+        if let data = try? JSONEncoder().encode(dailySupportLogs) {
+            UserDefaults.standard.set(data, forKey: "daily_support_logs")
+        }
+    }
+    
+    func todaySupportLog() -> DailySupportLog {
+        let today = Calendar.current.startOfDay(for: Date())
+        if let log = dailySupportLogs.first(where: { $0.date == today }) {
+            return log
+        }
+        let newLog = DailySupportLog(date: today)
+        dailySupportLogs.append(newLog)
+        return newLog
+    }
+    
+    func toggleSupportMed(id: UUID) {
+        let today = Calendar.current.startOfDay(for: Date())
+        if let index = dailySupportLogs.firstIndex(where: { $0.date == today }) {
+            if dailySupportLogs[index].completedMedIds.contains(id) {
+                dailySupportLogs[index].completedMedIds.remove(id)
+            } else {
+                dailySupportLogs[index].completedMedIds.insert(id)
+            }
+        } else {
+            var newLog = DailySupportLog(date: today)
+            newLog.completedMedIds.insert(id)
+            dailySupportLogs.append(newLog)
         }
     }
 }
