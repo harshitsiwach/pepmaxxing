@@ -94,7 +94,7 @@ struct RemindersView: View {
                 }
                 .frame(width: 80)
                 
-                // Peptide info
+                // Compound info
                 VStack(alignment: .leading, spacing: 3) {
                     Text(reminder.peptideName)
                         .font(.system(size: 15, weight: .bold))
@@ -154,21 +154,22 @@ struct AddReminderSheet: View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
-                    // Peptide picker
+                    // Compound picker
                     GlassCard {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(spacing: 8) {
-                                Image(systemName: "pills.fill")
+                                Image(systemName: "flask.fill")
                                     .foregroundStyle(theme.primary)
-                                Text("Peptide")
+                                Text("Compound")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundStyle(theme.text)
                             }
                             
-                            Picker("Select Peptide", selection: $selectedPeptide) {
+                            Picker("Select Compound", selection: $selectedPeptide) {
                                 Text("Select...").tag("")
-                                ForEach(store.peptides, id: \.name) { p in
-                                    Text(p.name).tag(p.name)
+                                let allNames = store.peptides.map(\.name) + store.steroids.map(\.name)
+                                ForEach(allNames, id: \.self) { name in
+                                    Text(name).tag(name)
                                 }
                             }
                             .tint(theme.primary)

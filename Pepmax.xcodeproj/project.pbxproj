@@ -41,13 +41,13 @@
 		05F55C1D06C8FF244FC32FF0 /* CycleAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleAnalyticsView.swift; sourceTree = "<group>"; };
 		0A1B4A924341158691B01E78 /* Peptide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peptide.swift; sourceTree = "<group>"; };
 		19CC4F04C86CBFBD22F256B7 /* EncyclopediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncyclopediaView.swift; sourceTree = "<group>"; };
-		1C481D43BEBE67440680C431 /* Pepmax.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Pepmax.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C481D43BEBE67440680C431 /* Pepmax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pepmax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41912C7A265173DDF0302DC2 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		41B78FA435539C0B18E0B564 /* PeptideDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideDetailView.swift; sourceTree = "<group>"; };
 		429FC9522D228AB6CF3386BC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		46A10FC4C1C286697809EE7A /* DataExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExporter.swift; sourceTree = "<group>"; };
-		4ADA945858E2E11852D9EF81 /* peptides.csv */ = {isa = PBXFileReference; path = peptides.csv; sourceTree = "<group>"; };
-		5487DE57618354E679DD3675 /* steroids.csv */ = {isa = PBXFileReference; path = steroids.csv; sourceTree = "<group>"; };
+		4ADA945858E2E11852D9EF81 /* peptides.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = peptides.csv; sourceTree = "<group>"; };
+		5487DE57618354E679DD3675 /* steroids.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = steroids.csv; sourceTree = "<group>"; };
 		66BB87C1FA1E5BF9B35B3811 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		73C1794D3D0FEDF919788632 /* CalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorView.swift; sourceTree = "<group>"; };
 		915F5BB95526A0354F33E8E2 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -237,7 +237,6 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					C1298462C9B166BC6A7B9AA9 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -441,7 +440,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LSA4WRXY8N;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -466,7 +465,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LSA4WRXY8N;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

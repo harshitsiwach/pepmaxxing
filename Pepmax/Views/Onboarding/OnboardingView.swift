@@ -148,7 +148,7 @@ struct OnboardingView: View {
                             Circle().stroke(theme.primary.opacity(0.3), lineWidth: 1)
                         }
                     
-                    Image(systemName: "pills.fill")
+                    Image(systemName: "flask.fill")
                         .font(.system(size: 42, weight: .bold))
                         .foregroundStyle(theme.primary)
                 }
@@ -174,7 +174,7 @@ struct OnboardingView: View {
                             )
                         }
                     
-                    Text("Your personal peptide encyclopedia,\ntracker, and dosage calculator")
+                    Text("Your personal compound encyclopedia,\ntracker, and dosage calculator")
                         .font(.system(size: 15, weight: .regular))
                         .foregroundStyle(theme.textMuted)
                         .multilineTextAlignment(.center)
@@ -588,7 +588,7 @@ struct OnboardingView: View {
                     }
                 }
                 
-                // Peptide count teaser
+                // Compound count teaser
                 GlassCard {
                     HStack(spacing: 14) {
                         ZStack {
@@ -600,7 +600,7 @@ struct OnboardingView: View {
                                 .foregroundStyle(theme.primary)
                         }
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("134 Peptides Ready")
+                            Text("\(store.peptides.count + store.steroids.count) Compounds Ready")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundStyle(theme.text)
                             Text("Encyclopedia • Tracker • Calculator")

@@ -21,8 +21,8 @@ struct CycleAnalyticsView: View {
                     // Heatmap
                     heatmapSection
                     
-                    // Top Peptides Chart
-                    topPeptidesSection
+                    // Top Compounds Chart
+                    topCompoundsSection
                     
                     // Body Metrics (if we had historic data we'd graph it, but we'll show current BMI impact)
                     bodyMetricsSection
@@ -55,7 +55,7 @@ struct CycleAnalyticsView: View {
             HStack(spacing: 12) {
                 statCard(title: "Total Injections", value: "\(store.totalInjections)", icon: "syringe.fill", color: theme.primary)
                 statCard(title: "Cycles Completed", value: "\(store.cycles.filter { !$0.isActive }.count)", icon: "arrow.triangle.2.circlepath", color: theme.success)
-                statCard(title: "Peptides Used", value: "\(Set(store.cycles.flatMap { $0.peptides }).count)", icon: "pills.fill", color: Color(hex: "6C5CE7"))
+                statCard(title: "Compounds Used", value: "\(Set(store.cycles.flatMap { $0.peptides }).count)", icon: "flask.fill", color: Color(hex: "6C5CE7"))
             }
         }
     }
@@ -157,15 +157,15 @@ struct CycleAnalyticsView: View {
         }
     }
     
-    // MARK: - Top Peptides
+    // MARK: - Top Compounds
     
-    private var topPeptidesSection: some View {
+    private var topCompoundsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Most Used Peptides")
+            Text("Most Used Compounds")
                 .font(.system(size: 18, weight: .bold))
                 .foregroundStyle(theme.text)
             
-            let counts = peptideUsageCounts()
+            let counts = compoundUsageCounts()
             if counts.isEmpty {
                 GlassCard {
                     Text("Not enough data yet")
@@ -209,7 +209,7 @@ struct CycleAnalyticsView: View {
         }
     }
     
-    private func peptideUsageCounts() -> [(key: String, value: Int)] {
+    private func compoundUsageCounts() -> [(key: String, value: Int)] {
         var counts: [String: Int] = [:]
         for cycle in store.cycles {
             for log in cycle.logs {
