@@ -4,7 +4,9 @@ struct CompareView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.isDarkMode) private var isDarkMode
     @State private var selectedPeptides: [Peptide] = []
+    @State private var selectedSteroids: [Steroid] = []
     @State private var showPicker = false
+    @State private var mode: EncyclopediaView.CompoundMode = .peptides
     
     private var theme: LiquidGlassTheme { isDarkMode ? .dark : .light }
     
@@ -17,27 +19,45 @@ struct CompareView: View {
                         Text("Compare")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundStyle(theme.text)
-                        Text("Side-by-side peptide comparison")
+                        Text("Side-by-side compound comparison")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(theme.textMuted)
                     }
                     Spacer()
                 }
                 
-                // Selected peptides chips
+                // Mode Picker
+                Picker("Compound Type", selection: $mode) {
+                    ForEach(EncyclopediaView.CompoundMode.allCases, id: \.self) { m in
+                        Text(m.rawValue).tag(m)
+                    }
+                }
+                .pickerStyle(.segmented)
+                
+                // Selected chips
                 HStack(spacing: 10) {
                     ForEach(0..<3, id: \.self) { index in
-                        if index < selectedPeptides.count {
-                            selectedChip(selectedPeptides[index], index: index)
+                        if mode == .peptides {
+                            if index < selectedPeptides.count {
+                                selectedChip(selectedPeptides[index], index: index)
+                            } else {
+                                addSlot(index: index)
+                            }
                         } else {
-                            addSlot(index: index)
+                            if index < selectedSteroids.count {
+                                selectedSteroidChip(selectedSteroids[index], index: index)
+                            } else {
+                                addSlot(index: index)
+                            }
                         }
                     }
                 }
                 
                 // Comparison table
-                if selectedPeptides.count >= 2 {
+                if mode == .peptides && selectedPeptides.count >= 2 {
                     comparisonTable
+                } else if mode == .steroids && selectedSteroids.count >= 2 {
+                    comparisonSteroidTable
                 } else {
                     emptyState
                 }
@@ -47,7 +67,7 @@ struct CompareView: View {
         }
         .background(theme.background.ignoresSafeArea())
         .sheet(isPresented: $showPicker) {
-            ComparePicker(selectedPeptides: $selectedPeptides, maxSelection: 3)
+            ComparePicker(mode: mode, selectedPeptides: $selectedPeptides, selectedSteroids: $selectedSteroids, maxSelection: 3)
                 .environmentObject(store)
         }
     }
@@ -86,6 +106,24 @@ struct CompareView: View {
         }
     }
     
+    private func selectedSteroidChip(_ steroid: Steroid, index: Int) -> some View {
+        let colors: [Color] = [Color(hex: "FF3B30"), Color(hex: "FF9500"), Color(hex: "FF2D55")]
+        let color = colors[index % colors.count]
+        
+        return HStack(spacing: 6) {
+            Circle().fill(color).frame(width: 8, height: 8)
+            Text(steroid.name).font(.system(size: 12, weight: .semibold)).foregroundStyle(theme.text).lineLimit(1)
+            Button {
+                withAnimation(.spring(response: 0.3)) {
+                    selectedSteroids.removeAll { $0.id == steroid.id }
+                    Haptics.impact(.light)
+                }
+            } label: { Image(systemName: "xmark.circle.fill").font(.system(size: 12)).foregroundStyle(theme.textMuted) }
+        }
+        .padding(.horizontal, 12).padding(.vertical, 8)
+        .background { Capsule().fill(color.opacity(0.12)).overlay { Capsule().stroke(color.opacity(0.3), lineWidth: 1) } }
+    }
+    
     private func addSlot(index: Int) -> some View {
         Button {
             showPicker = true
@@ -117,14 +155,14 @@ struct CompareView: View {
                 Image(systemName: "square.stack.3d.up")
                     .font(.system(size: 32, weight: .light))
                     .foregroundStyle(theme.textMuted)
-                Text("Select 2-3 Peptides")
+                Text(mode == .peptides ? "Select 2-3 Peptides" : "Select 2-3 Steroids")
                     .font(.system(size: 16, weight: .bold))
                     .foregroundStyle(theme.text)
                 Text("Compare dosage, routes, status, and mechanisms side by side")
                     .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(theme.textMuted)
                     .multilineTextAlignment(.center)
-                GlowButton(title: "Choose Peptides", icon: "plus.circle.fill", isSmall: true) {
+                GlowButton(title: mode == .peptides ? "Choose Peptides" : "Choose Steroids", icon: "plus.circle.fill", isSmall: true) {
                     showPicker = true
                 }
             }
@@ -150,6 +188,22 @@ struct CompareView: View {
                 String($0.genderNotes.prefix(80)) + ($0.genderNotes.count > 80 ? "..." : "")
             }, colors: colors)
             comparisonRow(title: "References", values: selectedPeptides.map { $0.references }, colors: colors)
+        }
+    }
+    
+    private var comparisonSteroidTable: some View {
+        let colors: [Color] = [Color(hex: "FF3B30"), Color(hex: "FF9500"), Color(hex: "FF2D55")]
+        return VStack(spacing: 12) {
+            comparisonRow(title: "Class", values: selectedSteroids.map { $0.steroidClass }, colors: colors)
+            comparisonRow(title: "Status", values: selectedSteroids.map { $0.clinicalStatus }, colors: colors, statusColors: selectedSteroids.map { Color(hex: $0.statusColor) })
+            comparisonRow(title: "Dosage (Men)", values: selectedSteroids.map { $0.dosageMen }, colors: colors)
+            comparisonRow(title: "Dosage (Women)", values: selectedSteroids.map { $0.dosageWomen }, colors: colors)
+            comparisonRow(title: "Route", values: selectedSteroids.map { $0.route }, colors: colors)
+            comparisonRow(title: "Mechanism", values: selectedSteroids.map {
+                $0.mechanism.components(separatedBy: ";").first?.trimmingCharacters(in: .whitespaces) ?? $0.mechanism
+            }, colors: colors)
+            comparisonRow(title: "Adverse Effects", values: selectedSteroids.map { String($0.adverseEffects.prefix(80)) + ($0.adverseEffects.count > 80 ? "..." : "") }, colors: colors)
+            comparisonRow(title: "References", values: selectedSteroids.map { $0.references }, colors: colors)
         }
     }
     
@@ -188,7 +242,9 @@ struct ComparePicker: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.isDarkMode) private var isDarkMode
     @Environment(\.dismiss) private var dismiss
+    let mode: EncyclopediaView.CompoundMode
     @Binding var selectedPeptides: [Peptide]
+    @Binding var selectedSteroids: [Steroid]
     let maxSelection: Int
     @State private var searchText = ""
     
@@ -196,77 +252,63 @@ struct ComparePicker: View {
     
     private var filteredPeptides: [Peptide] {
         if searchText.isEmpty { return store.peptides }
-        return store.peptides.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText) ||
-            $0.category.localizedCaseInsensitiveContains(searchText)
-        }
+        return store.peptides.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.category.localizedCaseInsensitiveContains(searchText) }
+    }
+    
+    private var filteredSteroids: [Steroid] {
+        if searchText.isEmpty { return store.steroids }
+        return store.steroids.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.steroidClass.localizedCaseInsensitiveContains(searchText) }
     }
     
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 12) {
-                    GlassSearchBar(text: $searchText, placeholder: "Search peptides...")
+                    GlassSearchBar(text: $searchText, placeholder: mode == .peptides ? "Search peptides..." : "Search steroids...")
                         .padding(.horizontal, 20)
                     
-                    Text("\(selectedPeptides.count)/\(maxSelection) selected")
+                    let count = mode == .peptides ? selectedPeptides.count : selectedSteroids.count
+                    Text("\(count)/\(maxSelection) selected")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(theme.primary)
                         .padding(.horizontal, 20)
                     
                     LazyVStack(spacing: 6) {
-                        ForEach(filteredPeptides) { peptide in
-                            let isSelected = selectedPeptides.contains(where: { $0.id == peptide.id })
-                            Button {
-                                withAnimation(.spring(response: 0.3)) {
-                                    if isSelected {
-                                        selectedPeptides.removeAll { $0.id == peptide.id }
-                                    } else if selectedPeptides.count < maxSelection {
-                                        selectedPeptides.append(peptide)
+                        if mode == .peptides {
+                            ForEach(filteredPeptides) { peptide in
+                                let isSelected = selectedPeptides.contains(where: { $0.id == peptide.id })
+                                Button {
+                                    withAnimation(.spring(response: 0.3)) {
+                                        if isSelected { selectedPeptides.removeAll { $0.id == peptide.id } }
+                                        else if selectedPeptides.count < maxSelection { selectedPeptides.append(peptide) }
+                                        Haptics.selection()
                                     }
-                                    Haptics.selection()
-                                }
-                            } label: {
-                                HStack(spacing: 12) {
-                                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                                        .font(.system(size: 20))
-                                        .foregroundStyle(isSelected ? theme.primary : theme.textMuted)
-                                    
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(peptide.name)
-                                            .font(.system(size: 15, weight: .semibold))
-                                            .foregroundStyle(theme.text)
-                                        Text(peptide.category)
-                                            .font(.system(size: 12, weight: .medium))
-                                            .foregroundStyle(theme.textMuted)
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Text(peptide.clinicalStatus)
-                                        .font(.system(size: 10, weight: .semibold))
-                                        .foregroundStyle(Color(hex: peptide.statusColor))
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background { Capsule().fill(Color(hex: peptide.statusColor).opacity(0.12)) }
-                                }
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 10)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(isSelected ? theme.primary.opacity(0.06) : .clear)
-                                }
+                                } label: { pickerRow(name: peptide.name, category: peptide.category, status: peptide.clinicalStatus, color: peptide.statusColor, isSelected: isSelected, isFull: selectedPeptides.count >= maxSelection) }
+                                .buttonStyle(.plain)
+                                .disabled(!isSelected && selectedPeptides.count >= maxSelection)
+                                .opacity(!isSelected && selectedPeptides.count >= maxSelection ? 0.4 : 1)
                             }
-                            .buttonStyle(.plain)
-                            .disabled(!isSelected && selectedPeptides.count >= maxSelection)
-                            .opacity(!isSelected && selectedPeptides.count >= maxSelection ? 0.4 : 1)
+                        } else {
+                            ForEach(filteredSteroids) { steroid in
+                                let isSelected = selectedSteroids.contains(where: { $0.id == steroid.id })
+                                Button {
+                                    withAnimation(.spring(response: 0.3)) {
+                                        if isSelected { selectedSteroids.removeAll { $0.id == steroid.id } }
+                                        else if selectedSteroids.count < maxSelection { selectedSteroids.append(steroid) }
+                                        Haptics.selection()
+                                    }
+                                } label: { pickerRow(name: steroid.name, category: steroid.steroidClass, status: steroid.clinicalStatus, color: steroid.statusColor, isSelected: isSelected, isFull: selectedSteroids.count >= maxSelection) }
+                                .buttonStyle(.plain)
+                                .disabled(!isSelected && selectedSteroids.count >= maxSelection)
+                                .opacity(!isSelected && selectedSteroids.count >= maxSelection ? 0.4 : 1)
+                            }
                         }
                     }
                 }
                 .padding(.bottom, 40)
             }
             .background(theme.background.ignoresSafeArea())
-            .navigationTitle("Select Peptides")
+            .navigationTitle(mode == .peptides ? "Select Peptides" : "Select Steroids")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -281,5 +323,27 @@ struct ComparePicker: View {
             }
         }
         .presentationDetents([.large])
+    }
+    
+    private func pickerRow(name: String, category: String, status: String, color: String, isSelected: Bool, isFull: Bool) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.system(size: 20))
+                .foregroundStyle(isSelected ? theme.primary : theme.textMuted)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(name).font(.system(size: 15, weight: .semibold)).foregroundStyle(theme.text)
+                Text(category).font(.system(size: 12, weight: .medium)).foregroundStyle(theme.textMuted)
+            }
+            Spacer()
+            
+            Text(status)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(Color(hex: color))
+                .padding(.horizontal, 6).padding(.vertical, 2)
+                .background { Capsule().fill(Color(hex: color).opacity(0.12)) }
+        }
+        .padding(.horizontal, 20).padding(.vertical, 10)
+        .background { RoundedRectangle(cornerRadius: 10).fill(isSelected ? theme.primary.opacity(0.06) : .clear) }
     }
 }

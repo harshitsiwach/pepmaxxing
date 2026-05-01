@@ -8,12 +8,20 @@ class AppStore: ObservableObject {
     @Published var favoritePeptideNames: Set<String> { didSet { saveFavorites() } }
     @Published var recentlyViewedNames: [String] { didSet { saveRecents() } }
     
+    @Published var steroids: [Steroid] = []
+    @Published var favoriteSteroidNames: Set<String> { didSet { saveFavoriteSteroids() } }
+    @Published var recentlyViewedSteroidNames: [String] { didSet { saveRecentSteroids() } }
+    
     init() {
         self.profile = Self.loadProfile()
         self.cycles = Self.loadCycles()
         self.favoritePeptideNames = Self.loadFavorites()
         self.recentlyViewedNames = Self.loadRecents()
         self.peptides = PeptideDatabase.all
+        
+        self.favoriteSteroidNames = Self.loadFavoriteSteroids()
+        self.recentlyViewedSteroidNames = Self.loadRecentSteroids()
+        self.steroids = SteroidDatabase.shared.steroids
     }
     
     // MARK: - Favorites
@@ -36,6 +44,24 @@ class AppStore: ObservableObject {
         peptides.filter { favoritePeptideNames.contains($0.name) }
     }
     
+    func isFavorite(_ steroid: Steroid) -> Bool {
+        favoriteSteroidNames.contains(steroid.name)
+    }
+    
+    func toggleFavorite(_ steroid: Steroid) {
+        if favoriteSteroidNames.contains(steroid.name) {
+            favoriteSteroidNames.remove(steroid.name)
+            Haptics.impact(.light)
+        } else {
+            favoriteSteroidNames.insert(steroid.name)
+            Haptics.impact(.medium)
+        }
+    }
+    
+    var favoriteSteroids: [Steroid] {
+        steroids.filter { favoriteSteroidNames.contains($0.name) }
+    }
+    
     // MARK: - Recently Viewed
     
     func markViewed(_ peptide: Peptide) {
@@ -49,6 +75,20 @@ class AppStore: ObservableObject {
     var recentlyViewedPeptides: [Peptide] {
         recentlyViewedNames.compactMap { name in
             peptides.first { $0.name == name }
+        }
+    }
+    
+    func markViewed(_ steroid: Steroid) {
+        recentlyViewedSteroidNames.removeAll { $0 == steroid.name }
+        recentlyViewedSteroidNames.insert(steroid.name, at: 0)
+        if recentlyViewedSteroidNames.count > 10 {
+            recentlyViewedSteroidNames = Array(recentlyViewedSteroidNames.prefix(10))
+        }
+    }
+    
+    var recentlyViewedSteroids: [Steroid] {
+        recentlyViewedSteroidNames.compactMap { name in
+            steroids.first { $0.name == name }
         }
     }
     
@@ -81,8 +121,17 @@ class AppStore: ObservableObject {
         return peptides.filter { names.contains($0.name) }
     }
     
+    var featuredSteroids: [Steroid] {
+        let names = ["Testosterone (Cypionate/Enanthate)", "Oxandrolone", "Prednisone/Prednisolone", "Dexamethasone"]
+        return steroids.filter { names.contains($0.name) }
+    }
+    
     var uniqueCategories: [String] {
         Array(Set(peptides.map { $0.category })).sorted()
+    }
+    
+    var uniqueSteroidCategories: [String] {
+        Array(Set(steroids.map { $0.steroidClass })).sorted()
     }
     
     var recentLogs: [InjectionLog] {
@@ -132,6 +181,23 @@ class AppStore: ObservableObject {
     
     private func saveRecents() {
         UserDefaults.standard.set(recentlyViewedNames, forKey: "recent_peptides")
+    }
+    
+    private static func loadFavoriteSteroids() -> Set<String> {
+        guard let arr = UserDefaults.standard.array(forKey: "favorite_steroids") as? [String] else { return [] }
+        return Set(arr)
+    }
+    
+    private func saveFavoriteSteroids() {
+        UserDefaults.standard.set(Array(favoriteSteroidNames), forKey: "favorite_steroids")
+    }
+    
+    private static func loadRecentSteroids() -> [String] {
+        UserDefaults.standard.stringArray(forKey: "recent_steroids") ?? []
+    }
+    
+    private func saveRecentSteroids() {
+        UserDefaults.standard.set(recentlyViewedSteroidNames, forKey: "recent_steroids")
     }
 }
 

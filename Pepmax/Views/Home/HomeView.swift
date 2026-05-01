@@ -28,20 +28,20 @@ struct HomeView: View {
                     activeCycleCard
                     
                     // My Favorites
-                    if !store.favoritePeptides.isEmpty {
+                    if !store.favoritePeptides.isEmpty || !store.favoriteSteroids.isEmpty {
                         favoritesSection
                     }
                     
                     // Recently Viewed
-                    if !store.recentlyViewedPeptides.isEmpty {
+                    if !store.recentlyViewedPeptides.isEmpty || !store.recentlyViewedSteroids.isEmpty {
                         recentlyViewedSection
                     }
                     
                     // Goal Cards
                     goalCardsSection
                     
-                    // Featured Peptides
-                    featuredPeptidesSection
+                    // Featured Compounds
+                    featuredCompoundsSection
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 100)
@@ -200,12 +200,12 @@ struct HomeView: View {
                 statCard(title: "Peptides", value: "\(store.peptides.count)", icon: "pills.fill", color: theme.primary)
             }.buttonStyle(.plain)
             
-            Button { selectedTab = 1 } label: {
-                statCard(title: "Injections", value: "\(store.totalInjections)", icon: "syringe.fill", color: theme.success)
+            Button { selectedTab = 3 } label: {
+                statCard(title: "Steroids", value: "\(store.steroids.count)", icon: "figure.strengthtraining.traditional", color: Color(hex: "FF3B30"))
             }.buttonStyle(.plain)
             
-            Button { selectedTab = 3 } label: {
-                statCard(title: "Categories", value: "\(store.uniqueCategories.count)", icon: "square.grid.2x2.fill", color: Color(hex: "6C5CE7"))
+            Button { selectedTab = 1 } label: {
+                statCard(title: "Injections", value: "\(store.totalInjections)", icon: "syringe.fill", color: theme.success)
             }.buttonStyle(.plain)
         }
     }
@@ -425,6 +425,12 @@ struct HomeView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    ForEach(store.favoriteSteroids) { steroid in
+                        NavigationLink(destination: SteroidDetailView(steroid: steroid)) {
+                            favoriteSteroidCard(steroid)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
             }
         }
@@ -462,6 +468,29 @@ struct HomeView: View {
         }
     }
     
+    private func favoriteSteroidCard(_ steroid: Steroid) -> some View {
+        GlassCard(padding: 14) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(Color(hex: "FF3B30").opacity(0.15))
+                            .frame(width: 36, height: 36)
+                        Image(systemName: "figure.strengthtraining.traditional")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(Color(hex: "FF3B30"))
+                    }
+                    Spacer()
+                    Image(systemName: "heart.fill").font(.system(size: 12)).foregroundStyle(theme.primary)
+                }
+                
+                Text(steroid.name).font(.system(size: 14, weight: .bold)).foregroundStyle(theme.text).lineLimit(1)
+                Text(steroid.steroidClass).font(.system(size: 11, weight: .medium)).foregroundStyle(theme.textMuted).lineLimit(1)
+            }
+            .frame(width: 130)
+        }
+    }
+    
     // MARK: - Recently Viewed
     
     private var recentlyViewedSection: some View {
@@ -477,9 +506,15 @@ struct HomeView: View {
                 Spacer()
             }
             
-            ForEach(store.recentlyViewedPeptides.prefix(5)) { peptide in
+            ForEach(store.recentlyViewedPeptides.prefix(3)) { peptide in
                 NavigationLink(destination: PeptideDetailView(peptide: peptide)) {
                     recentRow(peptide)
+                }
+                .buttonStyle(.plain)
+            }
+            ForEach(store.recentlyViewedSteroids.prefix(3)) { steroid in
+                NavigationLink(destination: SteroidDetailView(steroid: steroid)) {
+                    recentSteroidRow(steroid)
                 }
                 .buttonStyle(.plain)
             }
@@ -522,13 +557,33 @@ struct HomeView: View {
         .padding(.vertical, 6)
     }
     
-    // MARK: - Featured Peptides
-
+    private func recentSteroidRow(_ steroid: Steroid) -> some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color(hex: "FF3B30").opacity(0.12)).frame(width: 38, height: 38)
+                Image(systemName: "figure.strengthtraining.traditional").font(.system(size: 15, weight: .semibold)).foregroundStyle(Color(hex: "FF3B30"))
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(steroid.name).font(.system(size: 14, weight: .semibold)).foregroundStyle(theme.text).lineLimit(1)
+                Text(steroid.steroidClass).font(.system(size: 11, weight: .medium)).foregroundStyle(theme.textMuted)
+            }
+            Spacer()
+            
+            if store.isFavorite(steroid) {
+                Image(systemName: "heart.fill").font(.system(size: 11)).foregroundStyle(theme.primary)
+            }
+            Image(systemName: "chevron.right").font(.system(size: 11, weight: .semibold)).foregroundStyle(theme.textMuted.opacity(0.5))
+        }
+        .padding(.vertical, 6)
+    }
     
-    private var featuredPeptidesSection: some View {
+    // MARK: - Featured Compounds
+    
+    private var featuredCompoundsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Featured Peptides")
+                Text("Featured Compounds")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(theme.text)
                 Spacer()
@@ -539,6 +594,13 @@ struct HomeView: View {
             ForEach(store.featuredPeptides) { peptide in
                 NavigationLink(destination: PeptideDetailView(peptide: peptide)) {
                     featuredPeptideRow(peptide)
+                }
+                .buttonStyle(.plain)
+            }
+            
+            ForEach(store.featuredSteroids) { steroid in
+                NavigationLink(destination: SteroidDetailView(steroid: steroid)) {
+                    featuredSteroidRow(steroid)
                 }
                 .buttonStyle(.plain)
             }
@@ -581,6 +643,31 @@ struct HomeView: View {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(theme.textMuted)
+            }
+        }
+    }
+    
+    private func featuredSteroidRow(_ steroid: Steroid) -> some View {
+        GlassCard(padding: 14) {
+            HStack(spacing: 14) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color(hex: "FF3B30").opacity(0.15)).frame(width: 44, height: 44)
+                    Image(systemName: "figure.strengthtraining.traditional").font(.system(size: 18, weight: .semibold)).foregroundStyle(Color(hex: "FF3B30"))
+                }
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(steroid.name).font(.system(size: 15, weight: .bold)).foregroundStyle(theme.text)
+                    Text(steroid.steroidClass).font(.system(size: 12, weight: .medium)).foregroundStyle(theme.textMuted)
+                }
+                Spacer()
+                
+                Text(steroid.clinicalStatus)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Color(hex: steroid.statusColor))
+                    .padding(.horizontal, 8).padding(.vertical, 4)
+                    .background { Capsule().fill(Color(hex: steroid.statusColor).opacity(0.15)) }
+                
+                Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(theme.textMuted)
             }
         }
     }

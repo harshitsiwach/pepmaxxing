@@ -18,21 +18,26 @@
 		6FE89B0DBD76043F4FB4286B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C18EF259A8D82A7F17B053C3 /* Assets.xcassets */; };
 		75970A762FDAC0B415FB5530 /* TrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF0E22C625FCD9F359C1C5 /* TrackerView.swift */; };
 		7B737B5984E3EB3FA7C71228 /* PepmaxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B251DA20045A229349CB01E5 /* PepmaxApp.swift */; };
+		7F761F11FD57CF4A99B4EFC7 /* SteroidDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FA2EB3AD12DB93E11D1C08 /* SteroidDetailView.swift */; };
 		95F049E1BEDC9001DB71E363 /* DataExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A10FC4C1C286697809EE7A /* DataExporter.swift */; };
 		B284E269B9D9915CFF0C5BB4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41912C7A265173DDF0302DC2 /* Theme.swift */; };
 		C2C96BC0FFB690AC581DFB7F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA9C85C489CBFA2BA235AFD /* SettingsView.swift */; };
 		D1625E200446534EEF4DD4A8 /* DailyTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B6841000571E9BC500456 /* DailyTips.swift */; };
+		D77E7CA0E3B12A9CE9923B2F /* steroids.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5487DE57618354E679DD3675 /* steroids.csv */; };
 		DA6616DFB7764F91BDB897D7 /* InjectionLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9E8A66AEF4ABA181E4BD7 /* InjectionLog.swift */; };
 		DBFFEEEC11202A2913FFF06C /* CycleAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F55C1D06C8FF244FC32FF0 /* CycleAnalyticsView.swift */; };
+		DEF70C13626CB0754CA1D219 /* Steroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE9305D184AE3DE9773327 /* Steroid.swift */; };
 		E6E870581ED175160AECE104 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915F5BB95526A0354F33E8E2 /* OnboardingView.swift */; };
 		EAEBE0958A47790AC6CBAC22 /* PeptideDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A905A21DE4EBD2D5AE2F7276 /* PeptideDatabase.swift */; };
 		EC834DB147FF971AB7A8A964 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BB87C1FA1E5BF9B35B3811 /* AppStore.swift */; };
 		ED2DF7CCBAC6BB3DB2A88205 /* CompareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EEE5B28BCA704CE8DC6BA /* CompareView.swift */; };
 		EDA4AB1BCCB3F1357B16EECB /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB98418A1CC329AB7B74DE1 /* RemindersView.swift */; };
+		F07117A781B45FDDB98A3812 /* SteroidDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02808D76B74E3CAD113DD4B8 /* SteroidDatabase.swift */; };
 		FBD95E11933822B1C8091BB0 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E5CEA9B44FF7A15B276AB /* NotificationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02808D76B74E3CAD113DD4B8 /* SteroidDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteroidDatabase.swift; sourceTree = "<group>"; };
 		05F55C1D06C8FF244FC32FF0 /* CycleAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleAnalyticsView.swift; sourceTree = "<group>"; };
 		0A1B4A924341158691B01E78 /* Peptide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peptide.swift; sourceTree = "<group>"; };
 		19CC4F04C86CBFBD22F256B7 /* EncyclopediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncyclopediaView.swift; sourceTree = "<group>"; };
@@ -42,10 +47,13 @@
 		429FC9522D228AB6CF3386BC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		46A10FC4C1C286697809EE7A /* DataExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExporter.swift; sourceTree = "<group>"; };
 		4ADA945858E2E11852D9EF81 /* peptides.csv */ = {isa = PBXFileReference; path = peptides.csv; sourceTree = "<group>"; };
+		5487DE57618354E679DD3675 /* steroids.csv */ = {isa = PBXFileReference; path = steroids.csv; sourceTree = "<group>"; };
 		66BB87C1FA1E5BF9B35B3811 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		73C1794D3D0FEDF919788632 /* CalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorView.swift; sourceTree = "<group>"; };
 		915F5BB95526A0354F33E8E2 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		9FCE9305D184AE3DE9773327 /* Steroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Steroid.swift; sourceTree = "<group>"; };
 		A51A759A26BCC3A95386904F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A6FA2EB3AD12DB93E11D1C08 /* SteroidDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteroidDetailView.swift; sourceTree = "<group>"; };
 		A905A21DE4EBD2D5AE2F7276 /* PeptideDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeptideDatabase.swift; sourceTree = "<group>"; };
 		ACA9C85C489CBFA2BA235AFD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AE4E5CEA9B44FF7A15B276AB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -69,6 +77,8 @@
 				AE4E5CEA9B44FF7A15B276AB /* NotificationManager.swift */,
 				A905A21DE4EBD2D5AE2F7276 /* PeptideDatabase.swift */,
 				4ADA945858E2E11852D9EF81 /* peptides.csv */,
+				02808D76B74E3CAD113DD4B8 /* SteroidDatabase.swift */,
+				5487DE57618354E679DD3675 /* steroids.csv */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -87,6 +97,7 @@
 				CD3EEE5B28BCA704CE8DC6BA /* CompareView.swift */,
 				19CC4F04C86CBFBD22F256B7 /* EncyclopediaView.swift */,
 				41B78FA435539C0B18E0B564 /* PeptideDetailView.swift */,
+				A6FA2EB3AD12DB93E11D1C08 /* SteroidDetailView.swift */,
 			);
 			path = Encyclopedia;
 			sourceTree = "<group>";
@@ -160,6 +171,7 @@
 			children = (
 				F7F9E8A66AEF4ABA181E4BD7 /* InjectionLog.swift */,
 				0A1B4A924341158691B01E78 /* Peptide.swift */,
+				9FCE9305D184AE3DE9773327 /* Steroid.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -256,6 +268,7 @@
 			files = (
 				6FE89B0DBD76043F4FB4286B /* Assets.xcassets in Resources */,
 				3CC4020DE23A83AB3DFC2CAA /* peptides.csv in Resources */,
+				D77E7CA0E3B12A9CE9923B2F /* steroids.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +298,9 @@
 				3A0DA88AC4B838EFD4C04CA2 /* PeptideDetailView.swift in Sources */,
 				EDA4AB1BCCB3F1357B16EECB /* RemindersView.swift in Sources */,
 				C2C96BC0FFB690AC581DFB7F /* SettingsView.swift in Sources */,
+				DEF70C13626CB0754CA1D219 /* Steroid.swift in Sources */,
+				F07117A781B45FDDB98A3812 /* SteroidDatabase.swift in Sources */,
+				7F761F11FD57CF4A99B4EFC7 /* SteroidDetailView.swift in Sources */,
 				B284E269B9D9915CFF0C5BB4 /* Theme.swift in Sources */,
 				75970A762FDAC0B415FB5530 /* TrackerView.swift in Sources */,
 			);

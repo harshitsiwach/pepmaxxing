@@ -121,7 +121,7 @@ struct TrackerView: View {
                                     .foregroundStyle(theme.success)
                             }
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Peptides")
+                                Text("Compounds")
                                     .font(.system(size: 11, weight: .medium))
                                     .foregroundStyle(theme.textMuted)
                                 Text("\(cycle.peptides.count)")
@@ -243,6 +243,12 @@ struct NewCycleSheet: View {
     @State private var selectedPeptides: Set<String> = []
     @State private var searchText = ""
     
+    enum CompoundMode: String, CaseIterable {
+        case peptides = "Peptides"
+        case steroids = "Steroids"
+    }
+    @State private var mode: CompoundMode = .peptides
+    
     private var theme: LiquidGlassTheme { isDarkMode ? .dark : .light }
     
     var body: some View {
@@ -265,42 +271,35 @@ struct NewCycleSheet: View {
                     // Select peptides
                     GlassSearchBar(text: $searchText, placeholder: "Search peptides to add...")
                     
+                    // Mode Picker
+                    Picker("Compound Type", selection: $mode) {
+                        ForEach(CompoundMode.allCases, id: \.self) { m in
+                            Text(m.rawValue).tag(m)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: mode) { _ in searchText = "" }
+                    
                     Text("\(selectedPeptides.count) selected")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(theme.primary)
                     
-                    let filtered = store.peptides.filter {
+                    let filteredPeptidesList = store.peptides.filter {
+                        searchText.isEmpty || $0.name.localizedCaseInsensitiveContains(searchText)
+                    }
+                    let filteredSteroidsList = store.steroids.filter {
                         searchText.isEmpty || $0.name.localizedCaseInsensitiveContains(searchText)
                     }
                     
                     LazyVStack(spacing: 8) {
-                        ForEach(filtered) { peptide in
-                            Button {
-                                if selectedPeptides.contains(peptide.name) {
-                                    selectedPeptides.remove(peptide.name)
-                                } else {
-                                    selectedPeptides.insert(peptide.name)
-                                }
-                            } label: {
-                                HStack {
-                                    Image(systemName: selectedPeptides.contains(peptide.name) ? "checkmark.circle.fill" : "circle")
-                                        .foregroundStyle(selectedPeptides.contains(peptide.name) ? theme.primary : theme.textMuted)
-                                    Text(peptide.name)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundStyle(theme.text)
-                                    Spacer()
-                                    Text(peptide.category)
-                                        .font(.system(size: 11))
-                                        .foregroundStyle(theme.textMuted)
-                                }
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 10)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(selectedPeptides.contains(peptide.name) ? theme.primary.opacity(0.08) : .clear)
-                                }
+                        if mode == .peptides {
+                            ForEach(filteredPeptidesList) { peptide in
+                                compoundRow(name: peptide.name, category: peptide.category)
                             }
-                            .buttonStyle(.plain)
+                        } else {
+                            ForEach(filteredSteroidsList) { steroid in
+                                compoundRow(name: steroid.name, category: steroid.steroidClass)
+                            }
                         }
                     }
                 }
@@ -326,6 +325,27 @@ struct NewCycleSheet: View {
             }
         }
         .presentationDetents([.large])
+    }
+    
+    private func compoundRow(name: String, category: String) -> some View {
+        Button {
+            if selectedPeptides.contains(name) {
+                selectedPeptides.remove(name)
+            } else {
+                selectedPeptides.insert(name)
+            }
+        } label: {
+            HStack {
+                Image(systemName: selectedPeptides.contains(name) ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(selectedPeptides.contains(name) ? theme.primary : theme.textMuted)
+                Text(name).font(.system(size: 14, weight: .medium)).foregroundStyle(theme.text)
+                Spacer()
+                Text(category).font(.system(size: 11)).foregroundStyle(theme.textMuted)
+            }
+            .padding(.horizontal, 16).padding(.vertical, 10)
+            .background { RoundedRectangle(cornerRadius: 10).fill(selectedPeptides.contains(name) ? theme.primary.opacity(0.08) : .clear) }
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -353,10 +373,10 @@ struct LogInjectionSheet: View {
                         // Peptide picker
                         GlassCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Peptide")
+                                Text("Compound")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(theme.text)
-                                Picker("Peptide", selection: $selectedPeptide) {
+                                Picker("Compound", selection: $selectedPeptide) {
                                     Text("Select...").tag("")
                                     ForEach(cycle.peptides, id: \.self) { name in
                                         Text(name).tag(name)
