@@ -23,8 +23,8 @@ Carthage/Build/
 *.lock
 .DS_Store
 
-## XcodeGen
-project.yml
+## XcodeGen Generated Project
+*.xcodeproj
 
 # Exclude original source files
 pep150.txt
